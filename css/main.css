@@ -1,0 +1,39 @@
+
+body{
+    background-color: rgb(148, 192, 192);
+}
+h1{
+    margin-left: 630px;
+}
+
+.levels{
+    margin-bottom: 20px;
+    margin-left: 630px; 
+}
+
+table{
+    background-color: grey;
+    margin: auto;
+}
+table td{
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    font-weight: bolder;
+}
+.blue{
+    color: blue;
+}
+.green{
+    color: green;
+}
+.red{
+    color: red;
+}
+.yellow{
+    color: yellow;
+}
+
+td:hover{
+    background-color: rgb(179, 169, 169); 
+}
