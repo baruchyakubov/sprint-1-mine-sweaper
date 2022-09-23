@@ -36,16 +36,16 @@ function renderBoard(board) {
 
 }
 
-function showAllMines(){
+function showAllMines() {
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
-            if(gBoard[i][j].isMine){
+            if (gBoard[i][j].isMine) {
                 var elCell = document.querySelector(`.cell-${i}-${j}`)
                 elCell.style.backgroundColor = 'rgb(179, 169, 169)'
-                renderCell(i, j, MINE) 
+                renderCell(i, j, MINE)
             }
         }
-    } 
+    }
 }
 
 function getRandomInt(min, max) {
@@ -96,6 +96,19 @@ function setNumColor(numCount) {
         case 4:
             color = 'yellow'
             break;
+        case 5:
+            color = 'brown'
+            break;
+        case 6:
+            color = 'purple'
+            break;
+        case 7:
+            color = 'orange'
+            break;
+        case 8:
+            color = 'pink'
+            break;
+
     }
     return color
 }

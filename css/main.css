@@ -1,20 +1,31 @@
+h1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(99, 42, 152);
+    color: rgb(174, 108, 82);
+    box-shadow: 10px 10px 10px;
+}
 .main{
-    position: absolute;
-    left: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 body{
-    background-color: rgb(148, 192, 192);
+    background-color: rgb(15, 126, 126);
 }
 
 table{
     background-color: grey;
+    box-shadow: 15px 15px 15px rgb(159, 115, 169);
 }
 table td{
     height: 50px;
     width: 50px;
     text-align: center;
     font-weight: bolder;
+    transition: 0.3s ease-out;
 }
 
 
@@ -23,19 +34,47 @@ td:hover{
     cursor: pointer;
 }
 .face{
+    margin-left: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: xx-large;
+
    
 }
 .face:hover{
     cursor: pointer;
 }
 
-.levels{
+button{
     cursor: pointer;
+    height: 50px;
+    width: 90px;
+    background-color: aquamarine;
+    border: 3px rgb(6, 199, 173) solid;
+    color: blueviolet;
+    font-weight: lighter;
+    transition: 0.6s ease-in-out;
 }
-p{
-    text-align: center;
+button:hover{
+    background-color: rgb(45, 97, 80);
+    border: 3px rgb(7, 106, 93) solid;
+    font-weight: bolder;
 }
-span{
-    margin: auto;
+
+.board{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%;
+}
+.lives{
+    margin-right: 1%;
+    margin-left: 1%;
+}
+.timer{
+    margin-right: 5%;
+    font-style: italic;
+    color: rgb(187, 0, 0);
+    font-weight: 900;
 }

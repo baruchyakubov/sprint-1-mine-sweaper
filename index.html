@@ -6,18 +6,19 @@
 </head>
 
 <body onload="initGame()">
+    <h1>Mine Sweeper</h1>
     <div class="main">
-        <h1>Mine Sweeper</h1>
         <div class="levels">
             <button onclick="easyMode()">easy</button>
             <button onclick="mediumMode()">medium</button>
             <button onclick="hardMode()">hard</button>
         </div>
-        <p onclick="restartGame()" class="face">😃</p>
-        <p class="lives">❤️❤️❤️</p>
-        <p class="timer">TIMER:</p>
-        <div class="board"></div>
+        <div onclick="restartGame()" class="face">😃</div>
+        <div class="lives">❤️❤️❤️</div>
+        <div class="timer">TIMER:</div>
     </div>
+    <div class="board"></div>
+
     <script src="js/main.js"></script>
     <script src="js/levels.js"></script>
     <script src="js/util.js"></script>

@@ -64,6 +64,7 @@ function cellMarked(i, j) {
     var elTable = document.querySelector('table')
     elTable.addEventListener('contextmenu', event => { event.preventDefault() })
 
+    if (gBoard[i][j].isShown && !gBoard[i][j].isMine) return
     if (!gBoard[i][j].isMarked && gGame.isOn) {
 
         gBoard[i][j].isMarked = true
@@ -104,7 +105,8 @@ function cellClicked(elCell, i, j) {
             gBoard[i][j].isShown = true
 
         } else if (gBoard[i][j].minesAroundCount === 0) {
-
+            var elCell = document.querySelector(`.cell-${i}-${j}`)
+            elCell.style.backgroundColor = 'rgb(179, 169, 169)'
             setNegsCellsShown(i, j)
 
         } else if (gBoard[i][j].isMine) {
@@ -183,11 +185,11 @@ function setMinesNegsCount(board, rowIdx, colIdx) {
 }
 
 function setNegsCellsShown(rowIdx, colIdx) {
-
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j >= gBoard[0].length) continue
+            if (gBoard[i][j].isMine) continue
             if (!gBoard[i][j].isShown) {
                 if (gBoard[i][j].minesAroundCount >= 1) {
 
@@ -205,11 +207,12 @@ function setNegsCellsShown(rowIdx, colIdx) {
                     gGame.gCountClicked++
                     var elCell = document.querySelector(`.cell-${i}-${j}`)
                     elCell.style.backgroundColor = 'rgb(179, 169, 169)'
-
+                    setNegsCellsShown(i, j)
                 }
             }
         }
     }
+
 }
 
 
