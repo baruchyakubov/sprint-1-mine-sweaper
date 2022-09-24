@@ -10,6 +10,7 @@ function easyMode() {
     elTimer.style.display = 'block'
     var elLives = document.querySelector('.lives')
     elLives.style.display = 'block'
+     document.querySelector('.bonus').style.display = 'flex'
     buildBoard()
     renderBoard(gBoard)
     setTimer()
@@ -26,6 +27,7 @@ function mediumMode() {
     elTimer.style.display = 'block'
     var elLives = document.querySelector('.lives')
     elLives.style.display = 'block'
+     document.querySelector('.bonus').style.display = 'flex'
     buildBoard()
     renderBoard(gBoard)
     setTimer()
@@ -42,7 +44,10 @@ function hardMode() {
     elTimer.style.display = 'block'
     var elLives = document.querySelector('.lives')
     elLives.style.display = 'block'
+     document.querySelector('.bonus').style.display = 'flex'
     buildBoard()
     renderBoard(gBoard)
     setTimer()
 }
+
+

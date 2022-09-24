@@ -5,6 +5,7 @@ const SMILING = '😃'
 const WINNER = '😎'
 const LOSSER = '😭'
 var lives = '❤️❤️❤️'
+localStorage.setItem('best time', Infinity)
 
 var gLevel = {
     SIZE: 0,
@@ -17,10 +18,14 @@ var gGame = {
     markedCount: 0,
     secsPassed: 0,
     gCountClicked: 0,
-    gCountLives: 0
+    gCountLives: 0,
+    isDark: false
 }
 var gBoard = []
 var arrLocations = []
+var gCurrGameStatus = {}
+var gKeptMoves = []
+var cellShown
 
 function restartGame() {
     var elTable = document.querySelector('table')
@@ -39,6 +44,7 @@ function initGame() {
     elTimer.style.display = 'none'
     var elLives = document.querySelector('.lives')
     elLives.style.display = 'none'
+    document.querySelector('.bonus').style.display = 'none'
 
     gLevel = {
         SIZE: 0,
@@ -52,10 +58,13 @@ function initGame() {
         secsPassed: 0,
         gCountClicked: 0,
         gCountFirstClicked: 0,
-        gCountLives: 0
+        gCountLives: 0,
+        isDark: gGame.isDark
     }
     gBoard = []
     arrLocations = []
+    gCurrGameStatus = {}
+    gKeptMoves = []
 }
 
 
@@ -72,14 +81,18 @@ function cellMarked(i, j) {
         renderCell(i, j, FLAG)
 
     } else {
-
         gBoard[i][j].isMarked = false
         if (gBoard[i][j].isMine) gGame.markedCount--
         renderCell(i, j, '')
 
     }
 
+
     if (gGame.gCountClicked === (gLevel.SIZE * gLevel.SIZE) - gLevel.MINES && gGame.markedCount === gLevel.MINES) {
+        if ((+gFullNum) < (+localStorage.getItem('best time'))) {
+            localStorage.setItem('best time', gFullNum)
+            document.querySelector('.best').innerText = `best time:${gFullNum}`
+        }
         restartGame()
         var elFace = document.querySelector('.face')
         elFace.innerText = WINNER
@@ -87,6 +100,7 @@ function cellMarked(i, j) {
 
 }
 function cellClicked(elCell, i, j) {
+
     gGame.gCountFirstClicked++
     if (gGame.gCountFirstClicked === 1) {
         setRandomMineLocations(arrLocations, i, j)
@@ -94,9 +108,10 @@ function cellClicked(elCell, i, j) {
         console.table(gBoard)
     }
     if (!gBoard[i][j].isShown && gGame.isOn) {
+        cellShown = []
 
         if (gBoard[i][j].minesAroundCount >= 1) {
-
+            cellShown.push({ i, j })
             gGame.gCountClicked++
             var color = setNumColor(gBoard[i][j].minesAroundCount)
             elCell.style.color = color
@@ -110,6 +125,7 @@ function cellClicked(elCell, i, j) {
             setNegsCellsShown(i, j)
 
         } else if (gBoard[i][j].isMine) {
+            cellShown.push({ i, j })
 
             elCell.style.backgroundColor = 'rgb(179, 169, 169)'
             gGame.gCountLives++
@@ -135,8 +151,16 @@ function cellClicked(elCell, i, j) {
 
         }
     }
+    gKeptMoves.push(cellShown)
+    console.log(gKeptMoves);
+
 
     if (gGame.gCountClicked === (gLevel.SIZE * gLevel.SIZE) - gLevel.MINES && gGame.markedCount === gLevel.MINES) {
+        if ((+gFullNum) < (+localStorage.getItem('best time'))) {
+            localStorage.setItem('best time', gFullNum)
+            document.querySelector('.best').innerText = `best time:${gFullNum}`
+        }
+        console.log(gFullNum);
         var elFace = document.querySelector('.face')
         elFace.innerText = WINNER
         restartGame()
@@ -191,6 +215,7 @@ function setNegsCellsShown(rowIdx, colIdx) {
             if (j < 0 || j >= gBoard[0].length) continue
             if (gBoard[i][j].isMine) continue
             if (!gBoard[i][j].isShown) {
+                cellShown.push({ i, j })
                 if (gBoard[i][j].minesAroundCount >= 1) {
 
                     gBoard[i][j].isShown = true

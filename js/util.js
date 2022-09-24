@@ -112,3 +112,37 @@ function setNumColor(numCount) {
     }
     return color
 }
+
+function darkMode(elBtn) {
+    if (!gGame.isDark) {
+        document.querySelector('body').style.backgroundColor = 'rgb(15, 126, 126)'
+        document.querySelector('h1').style.backgroundColor = 'rgb(99, 42, 152)'
+        document.querySelector('h1').style.color = 'rgb(174, 108, 82)'
+        elBtn.innerText = 'light mode'
+    } else {
+        document.querySelector('body').style.backgroundColor = 'rgb(114, 209, 209)'
+        document.querySelector('h1').style.backgroundColor = 'rgb(178, 112, 240)'
+        document.querySelector('h1').style.color = 'rgb(215, 187, 144)'
+        elBtn.innerText = 'dark mode'
+    }
+
+    gGame.isDark = !gGame.isDark
+}
+
+function undo() {
+    var lastMove = gKeptMoves.pop()
+    while (gBoard[lastMove[0].i][lastMove[0].j].isMarked) {
+        lastMove = gKeptMoves.pop()
+    }
+    console.log(lastMove);
+    for (var i = 0; i < lastMove.length; i++) {
+
+        var elCell = document.querySelector(`.cell-${lastMove[i].i}-${lastMove[i].j}`)
+        elCell.style.backgroundColor = 'grey'
+        renderCell(lastMove[i].i, lastMove[i].j, '')
+        gBoard[lastMove[i].i][lastMove[i].j].isShown = false
+        if (!gBoard[lastMove[i].i][lastMove[i].j].isMine)gGame.gCountClicked--
+
+    }
+}
+
