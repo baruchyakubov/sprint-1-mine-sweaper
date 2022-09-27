@@ -107,15 +107,16 @@ function cellMarked(i, j) {
 
 }
 function cellClicked(elCell, i, j) {
+    gGame.gCountFirstClicked++
+    if (gGame.gCountFirstClicked === 1) {
+        setRandomMineLocations(arrLocations, i, j)
+        checkIfNotMine(gBoard)
+        console.table(gBoard)
+    }
     if (gGame.isHint) {
         showHint(i, j)
     } else {
-        gGame.gCountFirstClicked++
-        if (gGame.gCountFirstClicked === 1) {
-            setRandomMineLocations(arrLocations, i, j)
-            checkIfNotMine(gBoard)
-            console.table(gBoard)
-        }
+       
         if (!gBoard[i][j].isShown && gGame.isOn) {
             cellShown = []
 
