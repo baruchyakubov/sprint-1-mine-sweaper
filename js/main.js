@@ -19,7 +19,10 @@ var gGame = {
     secsPassed: 0,
     gCountClicked: 0,
     gCountLives: 0,
-    isDark: false
+    isDark: false,
+    countSafeClickes: 3,
+    isHint: false,
+    countHints: 3
 }
 var gBoard = []
 var arrLocations = []
@@ -59,7 +62,10 @@ function initGame() {
         gCountClicked: 0,
         gCountFirstClicked: 0,
         gCountLives: 0,
-        isDark: gGame.isDark
+        isDark: gGame.isDark,
+        countSafeClickes: 3,
+        isHint: false,
+        countHints: 3
     }
     gBoard = []
     arrLocations = []
@@ -72,6 +78,7 @@ function cellMarked(i, j) {
 
     var elTable = document.querySelector('table')
     elTable.addEventListener('contextmenu', event => { event.preventDefault() })
+    if (gGame.isHint) return
 
     if (gBoard[i][j].isShown && !gBoard[i][j].isMine) return
     if (!gBoard[i][j].isMarked && gGame.isOn) {
@@ -100,71 +107,76 @@ function cellMarked(i, j) {
 
 }
 function cellClicked(elCell, i, j) {
+    if (gGame.isHint) {
+        showHint(i, j)
+    } else {
+        gGame.gCountFirstClicked++
+        if (gGame.gCountFirstClicked === 1) {
+            setRandomMineLocations(arrLocations, i, j)
+            checkIfNotMine(gBoard)
+            console.table(gBoard)
+        }
+        if (!gBoard[i][j].isShown && gGame.isOn) {
+            cellShown = []
 
-    gGame.gCountFirstClicked++
-    if (gGame.gCountFirstClicked === 1) {
-        setRandomMineLocations(arrLocations, i, j)
-        checkIfNotMine(gBoard)
-        console.table(gBoard)
-    }
-    if (!gBoard[i][j].isShown && gGame.isOn) {
-        cellShown = []
+            if (gBoard[i][j].minesAroundCount >= 1) {
+                cellShown.push({ i, j })
+                gGame.gCountClicked++
+                var color = setNumColor(gBoard[i][j].minesAroundCount)
+                elCell.style.color = color
+                elCell.style.backgroundColor = 'rgb(179, 169, 169)'
+                renderCell(i, j, gBoard[i][j].minesAroundCount)
+                gBoard[i][j].isShown = true
 
-        if (gBoard[i][j].minesAroundCount >= 1) {
-            cellShown.push({ i, j })
-            gGame.gCountClicked++
-            var color = setNumColor(gBoard[i][j].minesAroundCount)
-            elCell.style.color = color
-            elCell.style.backgroundColor = 'rgb(179, 169, 169)'
-            renderCell(i, j, gBoard[i][j].minesAroundCount)
-            gBoard[i][j].isShown = true
+            } else if (gBoard[i][j].minesAroundCount === 0) {
+                var elCell = document.querySelector(`.cell-${i}-${j}`)
+                elCell.style.backgroundColor = 'rgb(179, 169, 169)'
+                setNegsCellsShown(i, j)
 
-        } else if (gBoard[i][j].minesAroundCount === 0) {
-            var elCell = document.querySelector(`.cell-${i}-${j}`)
-            elCell.style.backgroundColor = 'rgb(179, 169, 169)'
-            setNegsCellsShown(i, j)
+            } else if (gBoard[i][j].isMine) {
+                cellShown.push({ i, j })
 
-        } else if (gBoard[i][j].isMine) {
-            cellShown.push({ i, j })
+                elCell.style.backgroundColor = 'rgb(179, 169, 169)'
+                gGame.gCountLives++
+                switch (gGame.gCountLives) {
+                    case 1:
+                        lives = '❤️❤️'
+                        break;
+                    case 2:
+                        lives = '❤️'
+                        break;
+                }
+                var elLives = document.querySelector('.lives')
+                elLives.innerText = lives
+                gBoard[i][j].isShown = true
+                if (gGame.gCountLives < 3) {
+                    renderCell(i, j, MINE)
+                } else {
+                    var elFace = document.querySelector('.face')
+                    elFace.innerText = LOSSER
+                    showAllMines()
+                    restartGame()
+                }
 
-            elCell.style.backgroundColor = 'rgb(179, 169, 169)'
-            gGame.gCountLives++
-            switch (gGame.gCountLives) {
-                case 1:
-                    lives = '❤️❤️'
-                    break;
-                case 2:
-                    lives = '❤️'
-                    break;
             }
-            var elLives = document.querySelector('.lives')
-            elLives.innerText = lives
-            gBoard[i][j].isShown = true
-            if (gGame.gCountLives < 3) {
-                renderCell(i, j, MINE)
-            } else {
-                var elFace = document.querySelector('.face')
-                elFace.innerText = LOSSER
-                showAllMines()
-                restartGame()
-            }
+        }
+        gKeptMoves.push(cellShown)
+        console.log(gKeptMoves);
 
+
+        if (gGame.gCountClicked === (gLevel.SIZE * gLevel.SIZE) - gLevel.MINES && gGame.markedCount === gLevel.MINES) {
+            if ((+gFullNum) < (+localStorage.getItem('best time'))) {
+                localStorage.setItem('best time', gFullNum)
+                document.querySelector('.best').innerText = `best time:${gFullNum}`
+            }
+            console.log(gFullNum);
+            var elFace = document.querySelector('.face')
+            elFace.innerText = WINNER
+            restartGame()
         }
     }
-    gKeptMoves.push(cellShown)
-    console.log(gKeptMoves);
 
 
-    if (gGame.gCountClicked === (gLevel.SIZE * gLevel.SIZE) - gLevel.MINES && gGame.markedCount === gLevel.MINES) {
-        if ((+gFullNum) < (+localStorage.getItem('best time'))) {
-            localStorage.setItem('best time', gFullNum)
-            document.querySelector('.best').innerText = `best time:${gFullNum}`
-        }
-        console.log(gFullNum);
-        var elFace = document.querySelector('.face')
-        elFace.innerText = WINNER
-        restartGame()
-    }
 
 
 }

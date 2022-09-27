@@ -141,8 +141,76 @@ function undo() {
         elCell.style.backgroundColor = 'grey'
         renderCell(lastMove[i].i, lastMove[i].j, '')
         gBoard[lastMove[i].i][lastMove[i].j].isShown = false
-        if (!gBoard[lastMove[i].i][lastMove[i].j].isMine)gGame.gCountClicked--
+        if (!gBoard[lastMove[i].i][lastMove[i].j].isMine) gGame.gCountClicked--
 
     }
 }
+
+function safeClickes(elBtn) {
+    gGame.countSafeClickes--
+    if (gGame.countSafeClickes < 0) return
+
+    var safeLocations = []
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            if (!gBoard[i][j].isShown && !gBoard[i][j].isMine) safeLocations.push({ i, j })
+        }
+    }
+    var safeLocation = safeLocations[getRandomInt(0, safeLocations.length)]
+    elBtn.innerHTML = `${gGame.countSafeClickes} safe clicks`
+    var elCell = document.querySelector(`.cell-${safeLocation.i}-${safeLocation.j}`)
+    elCell.style.backgroundColor = 'rgb(216, 109, 109)'
+    setTimeout(() => {
+        elCell.style.backgroundColor = 'gray'
+    }, 500);
+}
+
+function hints(elBtn) {
+    gGame.countHints--
+    if (gGame.countHints < 0) return
+    gGame.isHint = true
+    elBtn.innerHTML = `${gGame.countHints} hints`
+}
+
+function showHint(rowIdx, colIdx) {
+    var cells = []
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j >= gBoard[0].length) continue
+            if (!gBoard[i][j].isShown) {
+                cells.push({i, j})
+                if (gBoard[i][j].minesAroundCount >= 1) {
+
+                    renderCell(i, j, gBoard[i][j].minesAroundCount)
+                    var elCell = document.querySelector(`.cell-${i}-${j}`)
+                    var color = setNumColor(gBoard[i][j].minesAroundCount)
+                    elCell.style.color = color
+                    elCell.style.backgroundColor = 'rgb(179, 169, 169)'
+
+                } else if (gBoard[i][j].minesAroundCount === 0) {
+
+                    var elCell = document.querySelector(`.cell-${i}-${j}`)
+                    elCell.style.backgroundColor = 'rgb(179, 169, 169)'
+
+                }else if(gBoard[i][j].isMine){
+                    renderCell(i, j, MINE)
+                    var elCell = document.querySelector(`.cell-${i}-${j}`)
+                    elCell.style.backgroundColor = 'rgb(179, 169, 169)'
+                }
+            }
+        }
+    }
+
+    setTimeout(() => {
+        for (var i = 0; i < cells.length; i++) {
+            renderCell(cells[i].i, cells[i].j, '')
+            var elCell = document.querySelector(`.cell-${cells[i].i}-${cells[i].j}`)
+            elCell.style.backgroundColor = 'grey'
+        }
+    }, 1000);
+    gGame.isHint = !gGame.isHint
+
+}
+
 
