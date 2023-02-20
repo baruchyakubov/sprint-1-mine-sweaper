@@ -1,14 +1,14 @@
-var gElBtn = document.querySelector('.levels')
+let gElBtn = document.querySelector('.levels')
 function easyMode() {
     gGame.isOn = true
     gLevel.SIZE = 4
     gLevel.MINES = 3
     gElBtn.style.display = 'none'
-    var elFace = document.querySelector('.face')
+    let elFace = document.querySelector('.face')
     elFace.innerText = SMILING
-    var elTimer = document.querySelector('.timer')
+    let elTimer = document.querySelector('.timer')
     elTimer.style.display = 'block'
-    var elLives = document.querySelector('.lives')
+    let elLives = document.querySelector('.lives')
     elLives.style.display = 'block'
     document.querySelector('.bonus').style.display = 'flex'
     document.querySelector('.safeClick').innerText = '3 safe clicks'
@@ -23,11 +23,11 @@ function mediumMode() {
     gLevel.SIZE = 8
     gLevel.MINES = 14
     gElBtn.style.display = 'none'
-    var elFace = document.querySelector('.face')
+    let elFace = document.querySelector('.face')
     elFace.innerText = SMILING
-    var elTimer = document.querySelector('.timer')
+    let elTimer = document.querySelector('.timer')
     elTimer.style.display = 'block'
-    var elLives = document.querySelector('.lives')
+    let elLives = document.querySelector('.lives')
     elLives.style.display = 'block'
     document.querySelector('.bonus').style.display = 'flex'
     document.querySelector('.safeClick').innerText = '3 safe clicks'
@@ -42,9 +42,9 @@ function hardMode() {
     gLevel.SIZE = 12
     gLevel.MINES = 32
     gElBtn.style.display = 'none'
-    var elFace = document.querySelector('.face')
+    let elFace = document.querySelector('.face')
     elFace.innerText = SMILING
-    var elTimer = document.querySelector('.timer')
+    let elTimer = document.querySelector('.timer')
     elTimer.style.display = 'block'
     var elLives = document.querySelector('.lives')
     elLives.style.display = 'block'

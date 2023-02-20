@@ -4,15 +4,15 @@ const FLAG = '🚩'
 const SMILING = '😃'
 const WINNER = '😎'
 const LOSSER = '😭'
-var lives = '❤️❤️❤️'
+let lives = '❤️❤️❤️'
 localStorage.setItem('best time', Infinity)
 
-var gLevel = {
+let gLevel = {
     SIZE: 0,
     MINES: 0
 };
 
-var gGame = {
+let gGame = {
     isOn: false,
     shownCount: 0,
     markedCount: 0,
@@ -24,14 +24,14 @@ var gGame = {
     isHint: false,
     countHints: 3
 }
-var gBoard = []
-var arrLocations = []
-var gCurrGameStatus = {}
-var gKeptMoves = []
-var cellShown
+let gBoard = []
+let arrLocations = []
+let gCurrGameStatus = {}
+let gKeptMoves = []
+let cellShown
 
 function restartGame() {
-    var elTable = document.querySelector('table')
+    let elTable = document.querySelector('table')
     setTimeout(() => {
         elTable.style.display = 'none'
         gElBtn.style.display = 'block'
@@ -43,9 +43,9 @@ function initGame() {
     clearInterval(gTimer)
     lives = '❤️❤️❤️'
     document.querySelector('.lives').innerText = '❤️❤️❤️'
-    var elTimer = document.querySelector('.timer')
+    let elTimer = document.querySelector('.timer')
     elTimer.style.display = 'none'
-    var elLives = document.querySelector('.lives')
+    let elLives = document.querySelector('.lives')
     elLives.style.display = 'none'
     document.querySelector('.bonus').style.display = 'none'
 
@@ -76,7 +76,7 @@ function initGame() {
 
 function cellMarked(i, j) {
 
-    var elTable = document.querySelector('table')
+    let elTable = document.querySelector('table')
     elTable.addEventListener('contextmenu', event => { event.preventDefault() })
     if (gGame.isHint) return
 
@@ -101,7 +101,7 @@ function cellMarked(i, j) {
             document.querySelector('.best').innerText = `best time:${gFullNum}`
         }
         restartGame()
-        var elFace = document.querySelector('.face')
+        let elFace = document.querySelector('.face')
         elFace.innerText = WINNER
     }
 
@@ -123,14 +123,14 @@ function cellClicked(elCell, i, j) {
             if (gBoard[i][j].minesAroundCount >= 1) {
                 cellShown.push({ i, j })
                 gGame.gCountClicked++
-                var color = setNumColor(gBoard[i][j].minesAroundCount)
+                let color = setNumColor(gBoard[i][j].minesAroundCount)
                 elCell.style.color = color
                 elCell.style.backgroundColor = 'rgb(179, 169, 169)'
                 renderCell(i, j, gBoard[i][j].minesAroundCount)
                 gBoard[i][j].isShown = true
 
             } else if (gBoard[i][j].minesAroundCount === 0) {
-                var elCell = document.querySelector(`.cell-${i}-${j}`)
+                let elCell = document.querySelector(`.cell-${i}-${j}`)
                 elCell.style.backgroundColor = 'rgb(179, 169, 169)'
                 setNegsCellsShown(i, j)
 
@@ -147,13 +147,13 @@ function cellClicked(elCell, i, j) {
                         lives = '❤️'
                         break;
                 }
-                var elLives = document.querySelector('.lives')
+                let elLives = document.querySelector('.lives')
                 elLives.innerText = lives
                 gBoard[i][j].isShown = true
                 if (gGame.gCountLives < 3) {
                     renderCell(i, j, MINE)
                 } else {
-                    var elFace = document.querySelector('.face')
+                    let elFace = document.querySelector('.face')
                     elFace.innerText = LOSSER
                     showAllMines()
                     restartGame()
@@ -171,7 +171,7 @@ function cellClicked(elCell, i, j) {
                 document.querySelector('.best').innerText = `best time:${gFullNum}`
             }
             console.log(gFullNum);
-            var elFace = document.querySelector('.face')
+            let elFace = document.querySelector('.face')
             elFace.innerText = WINNER
             restartGame()
         }
@@ -185,13 +185,13 @@ function cellClicked(elCell, i, j) {
 
 function setRandomMineLocations(arrLocations, i, j) {
     //i check if the first clicked cell idx is in the array location and remove it in order to not place mine in this cell
-    for (var z = 0; z < arrLocations.length; z++) {
+    for (let z = 0; z < arrLocations.length; z++) {
         if (arrLocations[z].i === i && arrLocations[z].j === j) {
             arrLocations.splice(z, 1)
         }
     }
-    for (var d = 0; d < gLevel.MINES; d++) {
-        var randomIdx = arrLocations.splice(getRandomInt(1, arrLocations.length - 1), 1)[0]
+    for (let d = 0; d < gLevel.MINES; d++) {
+        let randomIdx = arrLocations.splice(getRandomInt(1, arrLocations.length - 1), 1)[0]
         gBoard[randomIdx.i][randomIdx.j].isMine = true
     }
 }
@@ -199,22 +199,22 @@ function setRandomMineLocations(arrLocations, i, j) {
 
 
 function checkIfNotMine(board) {
-    for (var i = 0; i < gLevel.SIZE; i++) {
-        for (var j = 0; j < gLevel.SIZE; j++) {
-            var minesCount = setMinesNegsCount(board, i, j)
+    for (let i = 0; i < gLevel.SIZE; i++) {
+        for (let j = 0; j < gLevel.SIZE; j++) {
+            let minesCount = setMinesNegsCount(board, i, j)
             if (!board[i][j].isMine) board[i][j].minesAroundCount = minesCount
         }
     }
 }
 
 function setMinesNegsCount(board, rowIdx, colIdx) {
-    var minesCount = 0
+    let minesCount = 0
 
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+    for (let i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= board.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+        for (let j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j >= board[0].length) continue
-            var currCell = board[i][j]
+            let currCell = board[i][j]
             if (currCell.isMine) minesCount++
         }
     }
@@ -222,9 +222,9 @@ function setMinesNegsCount(board, rowIdx, colIdx) {
 }
 
 function setNegsCellsShown(rowIdx, colIdx) {
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+    for (let i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+        for (let j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j >= gBoard[0].length) continue
             if (gBoard[i][j].isMine) continue
             if (!gBoard[i][j].isShown) {
@@ -234,8 +234,8 @@ function setNegsCellsShown(rowIdx, colIdx) {
                     gBoard[i][j].isShown = true
                     gGame.gCountClicked++
                     renderCell(i, j, gBoard[i][j].minesAroundCount)
-                    var elCell = document.querySelector(`.cell-${i}-${j}`)
-                    var color = setNumColor(gBoard[i][j].minesAroundCount)
+                    let elCell = document.querySelector(`.cell-${i}-${j}`)
+                    let color = setNumColor(gBoard[i][j].minesAroundCount)
                     elCell.style.color = color
                     elCell.style.backgroundColor = 'rgb(179, 169, 169)'
 
@@ -243,7 +243,7 @@ function setNegsCellsShown(rowIdx, colIdx) {
 
                     gBoard[i][j].isShown = true
                     gGame.gCountClicked++
-                    var elCell = document.querySelector(`.cell-${i}-${j}`)
+                    let elCell = document.querySelector(`.cell-${i}-${j}`)
                     elCell.style.backgroundColor = 'rgb(179, 169, 169)'
                     setNegsCellsShown(i, j)
                 }

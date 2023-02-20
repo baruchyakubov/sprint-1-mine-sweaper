@@ -18,11 +18,11 @@ function buildBoard() {
 
 function renderBoard(board) {
 
-    var strHTML = '<table border="1"><tbody>'
-    for (var i = 0; i < board.length; i++) {
+    let strHTML = '<table border="1"><tbody>'
+    for (let i = 0; i < board.length; i++) {
 
         strHTML += '<tr>'
-        for (var j = 0; j < board[0].length; j++) {
+        for (let j = 0; j < board[0].length; j++) {
 
             strHTML += `<td class="cell-${i}-${j}" data-i="${i}" data-j="${j}" 
             oncontextmenu="cellMarked(${i},${j})" onClick="cellClicked(this,${i},${j})"></td>`
@@ -31,16 +31,16 @@ function renderBoard(board) {
     }
     strHTML += '</tbody></table>'
 
-    var elDiv = document.querySelector('.board')
+    let elDiv = document.querySelector('.board')
     elDiv.innerHTML = strHTML
 
 }
 
 function showAllMines() {
-    for (var i = 0; i < gLevel.SIZE; i++) {
-        for (var j = 0; j < gLevel.SIZE; j++) {
+    for (let i = 0; i < gLevel.SIZE; i++) {
+        for (let j = 0; j < gLevel.SIZE; j++) {
             if (gBoard[i][j].isMine) {
-                var elCell = document.querySelector(`.cell-${i}-${j}`)
+                let elCell = document.querySelector(`.cell-${i}-${j}`)
                 elCell.style.backgroundColor = 'rgb(179, 169, 169)'
                 renderCell(i, j, MINE)
             }
@@ -58,16 +58,16 @@ function renderCell(i, j, value) {
     const elCell = document.querySelector(`.cell-${i}-${j}`)
     elCell.innerHTML = value
 }
-var gTimer = 0
-var gFullNum = ''
+let gTimer = 0
+let gFullNum = ''
 function setTimer() {
 
-    var elTimer = document.querySelector('.timer')
-    var a = Date.now()
+    let elTimer = document.querySelector('.timer')
+    let a = Date.now()
     gTimer = setInterval(() => {
-        var b = Date.now()
-        var seconds = `${Math.floor((b - a) / 1000)}`
-        var miliScn = `${((b - a) / 1000) - Math.floor((b - a) / 1000)}`
+        let b = Date.now()
+        let seconds = `${Math.floor((b - a) / 1000)}`
+        let miliScn = `${((b - a) / 1000) - Math.floor((b - a) / 1000)}`
         gFullNum = `${(+seconds) + (+miliScn)}`
         while (gFullNum.length < seconds.length + 4) {
             if (gFullNum.length === seconds.length) {
@@ -82,7 +82,7 @@ function setTimer() {
 }
 
 function setNumColor(numCount) {
-    var color = ''
+    let color = ''
     switch (numCount) {
         case 1:
             color = 'blue'
@@ -130,14 +130,14 @@ function darkMode(elBtn) {
 }
 
 function undo() {
-    var lastMove = gKeptMoves.pop()
+    let lastMove = gKeptMoves.pop()
     while (gBoard[lastMove[0].i][lastMove[0].j].isMarked) {
         lastMove = gKeptMoves.pop()
     }
     console.log(lastMove);
-    for (var i = 0; i < lastMove.length; i++) {
+    for (let i = 0; i < lastMove.length; i++) {
 
-        var elCell = document.querySelector(`.cell-${lastMove[i].i}-${lastMove[i].j}`)
+        let elCell = document.querySelector(`.cell-${lastMove[i].i}-${lastMove[i].j}`)
         elCell.style.backgroundColor = 'grey'
         renderCell(lastMove[i].i, lastMove[i].j, '')
         gBoard[lastMove[i].i][lastMove[i].j].isShown = false
@@ -150,15 +150,15 @@ function safeClickes(elBtn) {
     gGame.countSafeClickes--
     if (gGame.countSafeClickes < 0) return
 
-    var safeLocations = []
-    for (var i = 0; i < gLevel.SIZE; i++) {
-        for (var j = 0; j < gLevel.SIZE; j++) {
+    let safeLocations = []
+    for (let i = 0; i < gLevel.SIZE; i++) {
+        for (let j = 0; j < gLevel.SIZE; j++) {
             if (!gBoard[i][j].isShown && !gBoard[i][j].isMine) safeLocations.push({ i, j })
         }
     }
-    var safeLocation = safeLocations[getRandomInt(0, safeLocations.length)]
+    let safeLocation = safeLocations[getRandomInt(0, safeLocations.length)]
     elBtn.innerHTML = `${gGame.countSafeClickes} safe clicks`
-    var elCell = document.querySelector(`.cell-${safeLocation.i}-${safeLocation.j}`)
+    let elCell = document.querySelector(`.cell-${safeLocation.i}-${safeLocation.j}`)
     elCell.style.backgroundColor = 'rgb(216, 109, 109)'
     setTimeout(() => {
         elCell.style.backgroundColor = 'gray'
@@ -173,29 +173,29 @@ function hints(elBtn) {
 }
 
 function showHint(rowIdx, colIdx) {
-    var cells = []
-    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+    let cells = []
+    for (let i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+        for (let j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j >= gBoard[0].length) continue
             if (!gBoard[i][j].isShown) {
                 cells.push({i, j})
                 if (gBoard[i][j].minesAroundCount >= 1) {
 
                     renderCell(i, j, gBoard[i][j].minesAroundCount)
-                    var elCell = document.querySelector(`.cell-${i}-${j}`)
-                    var color = setNumColor(gBoard[i][j].minesAroundCount)
+                    let elCell = document.querySelector(`.cell-${i}-${j}`)
+                    let color = setNumColor(gBoard[i][j].minesAroundCount)
                     elCell.style.color = color
                     elCell.style.backgroundColor = 'rgb(179, 169, 169)'
 
                 } else if (gBoard[i][j].minesAroundCount === 0) {
 
-                    var elCell = document.querySelector(`.cell-${i}-${j}`)
+                    let elCell = document.querySelector(`.cell-${i}-${j}`)
                     elCell.style.backgroundColor = 'rgb(179, 169, 169)'
 
                 }else if(gBoard[i][j].isMine){
                     renderCell(i, j, MINE)
-                    var elCell = document.querySelector(`.cell-${i}-${j}`)
+                    let elCell = document.querySelector(`.cell-${i}-${j}`)
                     elCell.style.backgroundColor = 'rgb(179, 169, 169)'
                 }
             }
@@ -203,9 +203,9 @@ function showHint(rowIdx, colIdx) {
     }
 
     setTimeout(() => {
-        for (var i = 0; i < cells.length; i++) {
+        for (let i = 0; i < cells.length; i++) {
             renderCell(cells[i].i, cells[i].j, '')
-            var elCell = document.querySelector(`.cell-${cells[i].i}-${cells[i].j}`)
+            let elCell = document.querySelector(`.cell-${cells[i].i}-${cells[i].j}`)
             elCell.style.backgroundColor = 'grey'
         }
     }, 1000);
